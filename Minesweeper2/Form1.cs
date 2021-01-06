@@ -11,6 +11,7 @@ namespace Minesweeper2
     public partial class Form1 : Form
     {
         private int MAXBOMBS = 15;
+        private int bombs = 0;
         private bool GameStarted = false;
         private Button[,] buttons;
         List<Button> ButtonList;
@@ -92,7 +93,7 @@ namespace Minesweeper2
             this.ClientSize = new Size(1392, 1213);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Form1    Bombs Left: " + MAXBOMBS;
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -263,12 +264,16 @@ namespace Minesweeper2
                         btn.BackColor = Color.Green;
                         btn.Text = "FLAG";
                         SenderTag["Flag"] = 1;
+                        bombs--;
+                        this.Text = "Form1    Bombs Left: " + bombs;
                     }
                     else
                     {
                         btn.BackColor = Color.Blue;
                         btn.Text = "";
                         SenderTag["Flag"] = 0;
+                        bombs++;
+                        this.Text = "Form1    Bombs Left: " + bombs;
                     }
                 }
                 if (me.Button == MouseButtons.Left && SenderTag["Flag"] == 0)
@@ -276,7 +281,6 @@ namespace Minesweeper2
                     if (!GameStarted)
                     {
                         btn.BackColor = Color.Beige;
-                        int bombs = 0;
                         while (bombs < MAXBOMBS)
                         {
                             int row = new Random().Next(0, Rows);
@@ -287,7 +291,8 @@ namespace Minesweeper2
                             if ((this.buttons[row, col] != btn)
                                 && (Math.Abs(SenderTag["Column"] - tag["Column"]) > 2 || Math.Abs(SenderTag["Row"] - tag["Row"]) > 2)
                                 && (Math.Abs(SenderTag["Column"] - tag["Column"]) > 2 || Math.Abs(SenderTag["Row"] - tag["Row"]) != 0)
-                                && (Math.Abs(SenderTag["Column"] - tag["Column"]) != 0 || Math.Abs(SenderTag["Row"] - tag["Row"]) > 2))
+                                && (Math.Abs(SenderTag["Column"] - tag["Column"]) != 0 || Math.Abs(SenderTag["Row"] - tag["Row"]) > 2)
+                                && tag["Bomb"] == 0)
                             {
                                 tag["Bomb"] = 1;
                                 bombs++;
